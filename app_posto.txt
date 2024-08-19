@@ -1,0 +1,53 @@
+import mysql.connector
+ 
+conexao = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="pass12345",
+    database="aluno"
+)
+ 
+cursor = conexao.cursor()
+ 
+def inserir_dados(id_aluno, nome, idade, sala):
+    sql = "INSERT INTO alunos (id_aluno, nome, idade, sala) VALUES (%s, %s, %s, %s)"
+    val = (id_aluno, nome, idade, sala)
+    cursor.execute(sql, val)
+    conexao.commit()
+    print("Dados inseridos com sucesso.")
+ 
+def ler_dados():
+    cursor.execute("SELECT * FROM alunos")
+    resultados = cursor.fetchall()
+    for resultado in resultados:
+        print(resultado)
+ 
+def alterar_dados(id_aluno, novo_nome, nova_idade, nova_sala):
+    sql = "UPDATE alunos SET nome = %s, idade = %s, sala = %s WHERE id_aluno = %s"
+    val = (novo_nome, nova_idade, nova_sala, id_aluno)
+    cursor.execute(sql, val)
+    conexao.commit()
+    print("Dados alterados com sucesso.")
+ 
+def deletar_dados(id_aluno):
+    sql = "DELETE FROM alunos WHERE id_aluno = %s"
+    val = (id_aluno,)
+    cursor.execute(sql, val)
+    conexao.commit()
+    print("Dados deletados com sucesso.")
+ 
+inserir_dados(11, 'Rafael', 22, 112)
+inserir_dados(12, 'Isabela', 21, 113)
+ 
+ler_dados()
+ 
+alterar_dados(11, 'Rafaela', 23, 114)
+ 
+ler_dados()
+ 
+deletar_dados(12)
+ 
+ler_dados()
+ 
+cursor.close()
+conexao.close()
